@@ -1,11 +1,45 @@
 class HanoiGame {
-  constructor() {}
+  constructor(towers) {
+    if (towers) { this.towers = towers } else { this.towers = [[3, 2, 1], [], []] }
+  }
 
-  isValidMove(startTowerIdx, endTowerIdx) {}
+  isValidMove(startTowerIdx, endTowerIdx) {
+    // Assign basic variables
+    let currentTower;
+    let targetTower;
+    let currentDisk;
+    let bottomTargetDisk;
+    let topTargetDisk;
+    // make sure arguements are in bounds and then assign
+    if ((startTowerIdx < 3 && startTowerIdx > -1) && (endTowerIdx < 3 && endTowerIdx > -1)) {
+      currentTower = this.towers[startTowerIdx];
+      targetTower = this.towers[endTowerIdx];
+      bottomTargetDisk = targetTower[0];
+      topTargetDisk = targetTower[targetTower.length - 1];
+      currentDisk = currentTower[currentTower.length - 1];
+    } else { return false } // otherwise return false as arguements are out of bounds
 
-  move(startTowerIdx, endTowerIdx) {}
+    // Some extra conditional logic incase of sneaky edge cases we didn't account for
+    if (currentDisk > topTargetDisk) { return false; }
+    if (startTowerIdx === endTowerIdx || currentDisk === undefined) { return false; }
+    if (startTowerIdx === undefined || endTowerIdx === undefined) { return false; }
+    if (bottomTargetDisk === undefined || currentDisk < bottomTargetDisk) { return true; }
+  }
 
-  isWon() {}
+
+
+  move(startTowerIdx, endTowerIdx) {
+    if (this.isValidMove(startTowerIdx, endTowerIdx)) {
+      const startingTower = this.towers[startTowerIdx];
+      const endTower = this.towers[endTowerIdx];
+      const startingDisk = startingTower[startingTower.length - 1];
+      endTower.push(startingDisk);
+      startingTower.pop();
+      return true;
+    } else return false;
+   }
+
+  isWon() { return this.towers[2].length === 3 ||  this.towers[1].length === 3 }
 
   // the below methods are complete and do not need to be modified
   print() {
